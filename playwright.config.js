@@ -12,6 +12,9 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: 'off',
+    // Service workers bypass page.route(): blocked by default so network guards stay effective.
+    // tests/e2e/pwa.spec.js opts back in.
+    serviceWorkers: 'block',
     launchOptions: {
       // WebGL in headless Chromium
       args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'],

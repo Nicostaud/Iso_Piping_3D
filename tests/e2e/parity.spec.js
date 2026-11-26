@@ -18,7 +18,9 @@ const CASES = [
 ];
 const VIEWPORTS = [{ width: 1440, height: 900 }, { width: 390, height: 844 }];
 const THEMES = ['light', 'dark'];
-const MAX_DIFF = 0.005;
+// CLAUDE.md §9 allows up to 0.5 %. The refactor renders pixel-identical, and a 0.5 % budget
+// misses real regressions (a +1 px stroke on every pipe changes only ~0.04 %), so require 0.
+const MAX_DIFF = 0;
 
 const SIDES = {
   legacy: { hook: 'window.__t', G3: 'window.__t.G3' },
@@ -26,7 +28,7 @@ const SIDES = {
 };
 
 async function open(browser, side, c, viewport, colorScheme) {
-  const ctx = await browser.newContext({ viewport, colorScheme, deviceScaleFactor: 1 });
+  const ctx = await browser.newContext({ viewport, colorScheme, deviceScaleFactor: 1, serviceWorkers: 'block' });
   const page = await ctx.newPage();
   const errors = collectErrors(page);
   const external = side === 'legacy' ? await routeLegacy(page) : await guardNetwork(page);

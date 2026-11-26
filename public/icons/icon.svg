@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Iso Piping 3D: an isometric pipe run with an elbow and a branch on the iso grid.
+       Graphite ink + revision red. Content kept inside the central 80 % (maskable-safe). -->
+  <rect width="512" height="512" rx="96" fill="#15181c"/>
+  <g stroke="#2c353e" stroke-width="6" fill="none">
+    <path d="M56 352 L256 467 L456 352 M56 236 L256 351 L456 236 M56 120 L256 235 L456 120"/>
+    <path d="M56 160 L256 45 L456 160 M56 276 L256 161 L456 276 M56 392 L256 277 L456 392"/>
+  </g>
+  <path d="M96 356 L216 287 L216 169 L376 77" fill="none" stroke="#ff6b4f" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M216 287 L376 379" fill="none" stroke="#e7eaed" stroke-width="22" stroke-linecap="round"/>
+  <g fill="#e7eaed">
+    <circle cx="216" cy="287" r="20"/>
+    <circle cx="216" cy="169" r="20"/>
+  </g>
+  <path d="M146 300 L146 352 M166 288 L166 340" stroke="#e7eaed" stroke-width="10" stroke-linecap="round" transform="translate(-6 0)"/>
+</svg>

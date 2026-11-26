@@ -3,7 +3,10 @@ import { S } from '../state.js';
 import { normalize } from './model.js';
 
 export const KEYS=['isopiping.v4','isopiping.v3','isopiping.v2','isopiping.v1'];
-export function persist(){try{localStorage.setItem(KEYS[0],JSON.stringify(S.M));}catch(e){}}
+let onPersist=()=>{};
+/** Registers a callback run after every persist (used for the unsaved-changes marker). */
+export function setPersistHook(fn){onPersist=fn;}
+export function persist(){try{localStorage.setItem(KEYS[0],JSON.stringify(S.M));}catch(e){}onPersist();}
 
 /**
  * Loads the last model from localStorage, newest key first (v4 → v1), always
