@@ -22,7 +22,7 @@ import { buildPalette, fillCart, initPanels, refreshUI, setTool, toast } from '.
 import { draw2D, initSketch } from './ui/sketch.js';
 import { initActions } from './ui/actions.js';
 import { initTheme } from './ui/theme.js';
-import { initDocument, markDirty, setDocument } from './ui/document.js';
+import { initDocument, markDirty, openInitialProject, setDocument } from './ui/document.js';
 import { initUpdates } from './ui/update.js';
 import { initScene, mark3D, setView } from './view3d/scene.js';
 
@@ -54,5 +54,6 @@ $('#bUndo').disabled = true;
 setView('2d');
 setDocument(null, null); // startup model comes from local storage: no file yet, nothing unsaved
 initUpdates();
+openInitialProject();
 if (document.fonts) document.fonts.ready.then(() => { draw2D(); mark3D(); buildPalette(); });
 setTimeout(() => toast(fresh ? 'Offshore example loaded · catalogue: keys 1–4 · MTO on the right · G: 3D model' : 'Catalogue: keys 1–4 · MTO on the right · G: 3D model'), 700);

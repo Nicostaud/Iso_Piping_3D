@@ -24,7 +24,14 @@ function render() {
     el.textContent = label;
     el.title = doc.dirty ? 'Unsaved changes' : '';
   }
-  document.title = doc.name || doc.dirty ? `${label} — Iso Piping 3D` : 'Iso Piping 3D';
+  if (platform.isDesktop) {
+    // native window title: "Iso Piping 3D — <file>"
+    const t = doc.name || doc.dirty ? `Iso Piping 3D — ${label}` : 'Iso Piping 3D';
+    document.title = t;
+    platform.setTitle(t);
+  } else {
+    document.title = doc.name || doc.dirty ? `${label} — Iso Piping 3D` : 'Iso Piping 3D';
+  }
 }
 
 export const isDirty = () => doc.dirty;
@@ -61,7 +68,11 @@ export function newProject() {
 export async function openProject() {
   let f;
   try { f = await platform.openProject(); } catch (e) { toast('File could not be read'); return; }
-  if (!f) return;
+  if (f) loadProjectFile(f);
+}
+
+/** @param {{ name: string, path?: string, text: string }} f */
+function loadProjectFile(f) {
   let m;
   try {
     m = parseProject(f.text).model;
@@ -95,7 +106,9 @@ export async function saveProject(saveAs = false) {
 
 export function initDocument() {
   render();
-  platform.onBeforeClose(() => doc.dirty && !!doc.name);
+  // Desktop: confirm whenever there are unsaved changes. Web: only for a named
+  // project, untitled work is kept in the browser storage as in V4.1.
+  platform.onBeforeClose(() => doc.dirty && (platform.isDesktop || !!doc.name));
   // File shortcuts work everywhere, including inside form fields.
   addEventListener('keydown', (e) => {
     if (!(e.ctrlKey || e.metaKey) || e.altKey) return;
@@ -104,4 +117,11 @@ export function initDocument() {
     else if (k === 'o' && !e.shiftKey) { e.preventDefault(); e.stopImmediatePropagation(); openProject(); }
     else if (k === 'n' && !e.shiftKey) { e.preventDefault(); e.stopImmediatePropagation(); newProject(); }
   }, true);
+}
+
+/** Desktop: opens the .isop file the app was launched with (Explorer double-click). */
+export async function openInitialProject() {
+  if (!platform.initialProject) return;
+  const f = await platform.initialProject();
+  if (f) loadProjectFile(f);
 }

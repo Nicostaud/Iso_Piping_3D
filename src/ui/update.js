@@ -4,6 +4,7 @@
  */
 import { registerSW } from 'virtual:pwa-register';
 import { toast } from './panels.js';
+import { platform } from '../platform/index.js';
 
 function showUpdate(reload) {
   if (document.getElementById('upd')) return;
@@ -18,7 +19,8 @@ function showUpdate(reload) {
 }
 
 export function initUpdates() {
-  if (!('serviceWorker' in navigator)) return;
+  // Desktop builds ship their files with the installer: no service worker.
+  if (platform.isDesktop || !('serviceWorker' in navigator)) return;
   const update = registerSW({
     onNeedRefresh() { showUpdate(() => update(true)); },
     onOfflineReady() { toast('Ready to work offline'); },

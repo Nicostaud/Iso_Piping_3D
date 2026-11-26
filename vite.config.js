@@ -3,12 +3,19 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // BASE_PATH: '/' (default, Cloudflare / Netlify / local) or '/<repo>/' (GitHub Pages).
 const base = process.env.BASE_PATH || '/';
+// Set by the Tauri CLI while running beforeDevCommand / beforeBuildCommand.
+const desktop = !!process.env.TAURI_ENV_PLATFORM;
 
 export default defineConfig({
   base,
+  // Tauri dev: fixed port expected by src-tauri/tauri.conf.json (devUrl)
+  server: { port: 5173, strictPort: true },
+  clearScreen: false,
   build: { target: 'es2020', chunkSizeWarningLimit: 1000 },
   plugins: [
     VitePWA({
+      // the desktop app ships its files with the installer: no manifest, no service worker
+      disable: desktop,
       registerType: 'prompt',
       injectRegister: false, // registered from src/ui/update.js
       includeAssets: ['icons/icon.svg', 'icons/apple-touch-icon.png'],

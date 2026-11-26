@@ -1,0 +1,86 @@
+name: Release (Windows)
+
+# Push a tag vX.Y.Z matching package.json (npm version X.Y.Z && git push --follow-tags).
+# Creates a DRAFT GitHub Release with four installers:
+#   IsoPiping3D_<v>_x64.msi / IsoPiping3D_<v>_x64_setup.exe                  (downloads WebView2 if missing)
+#   IsoPiping3D_<v>_x64_offshore.msi / IsoPiping3D_<v>_x64_offshore_setup.exe (WebView2 embedded, no internet needed)
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    outputs:
+      release_id: ${{ steps.release.outputs.release_id }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check tag and versions
+        run: |
+          v=$(node -p "require('./package.json').version")
+          if [ "v$v" != "$GITHUB_REF_NAME" ]; then echo "::error::Tag $GITHUB_REF_NAME does not match package.json version $v"; exit 1; fi
+          node scripts/sync-version.mjs --check
+      - id: release
+        name: Create draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          id=$(gh api "repos/$GITHUB_REPOSITORY/releases" \
+            -f tag_name="$GITHUB_REF_NAME" -f name="Iso Piping 3D $GITHUB_REF_NAME" -F draft=true \
+            -f body="Windows 10/11 x64 installers. Standard: MSI or setup.exe (downloads Microsoft WebView2 if missing). Offshore: *_offshore installers, WebView2 embedded, install without internet. Not code-signed yet: Windows SmartScreen may warn (More info, then Run anyway)." \
+            --jq .id)
+          echo "release_id=$id" >> "$GITHUB_OUTPUT"
+
+  build-windows:
+    needs: create-release
+    runs-on: windows-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - variant: standard
+            args: ''
+            pattern: 'IsoPiping3D_[version]_[arch][_setup][ext]'
+          - variant: offshore
+            args: '--config src-tauri/tauri.offshore.conf.json'
+            pattern: 'IsoPiping3D_[version]_[arch]_offshore[_setup][ext]'
+    env:
+      # Code signing is not enabled. Placeholders for later (GitHub Secrets):
+      #   WINDOWS_CERTIFICATE           base64 of the .pfx code signing certificate
+      #   WINDOWS_CERTIFICATE_PASSWORD  its password
+      # then set bundle.windows.certificateThumbprint in src-tauri/tauri.conf.json.
+      WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+      WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+      - run: npm ci
+      - run: npm test
+      - name: Import code signing certificate
+        if: env.WINDOWS_CERTIFICATE != ''
+        shell: pwsh
+        run: |
+          $pfx = Join-Path $env:RUNNER_TEMP 'cert.pfx'
+          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE))
+          $pw = ConvertTo-SecureString -String $env:WINDOWS_CERTIFICATE_PASSWORD -Force -AsPlainText
+          Import-PfxCertificate -FilePath $pfx -CertStoreLocation Cert:\CurrentUser\My -Password $pw | Out-Null
+          Remove-Item $pfx
+      - uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          releaseId: ${{ needs.create-release.outputs.release_id }}
+          args: ${{ matrix.args }}
+          releaseAssetNamePattern: ${{ matrix.pattern }}
+          uploadUpdaterJson: false

@@ -37,6 +37,51 @@ Barlow / Barlow Condensed fonts are bundled.
   (`npm run build`) and publish `dist/`. For a sub-path, set `BASE_PATH`, e.g.
   `BASE_PATH=/tools/iso/ npm run build`.
 
+### Desktop app (Windows 10/11, Tauri v2)
+
+Same code base as the web app, packaged with [Tauri v2](https://tauri.app) (system WebView2).
+Native open / save dialogs, `.isop` files associated with the app, confirmation when closing
+with unsaved changes, window title `Iso Piping 3D — <file>`.
+
+**Installers** (GitHub *Releases*, built by `.github/workflows/release.yml`):
+
+| File | Use |
+|---|---|
+| `IsoPiping3D_<version>_x64.msi` / `IsoPiping3D_<version>_x64_setup.exe` | Standard. Downloads Microsoft WebView2 if it is missing (already present on up-to-date Windows 10/11). |
+| `IsoPiping3D_<version>_x64_offshore.msi` / `…_offshore_setup.exe` | **Offshore**: WebView2 embedded (larger), installs **without internet**. |
+
+The `setup.exe` (NSIS) installs per user without admin rights; the `.msi` suits IT deployment.
+
+> **SmartScreen warning.** The installers are **not code-signed** yet. Windows may show
+> *"Windows protected your PC"*: click **More info → Run anyway**. Signing can be enabled later
+> with a code signing certificate stored in GitHub Secrets (`WINDOWS_CERTIFICATE`,
+> `WINDOWS_CERTIFICATE_PASSWORD`, see `release.yml`) and `bundle.windows.certificateThumbprint`.
+
+**Release a version**
+
+```bash
+npm version 0.2.0          # bumps package.json, syncs src-tauri/tauri.conf.json + Cargo.toml, commits, tags v0.2.0
+git push --follow-tags     # the tag triggers release.yml → draft release with the 4 installers
+```
+
+Then review and publish the draft release on GitHub. Every PR also builds the standard
+installers (`windows-installers` artifact of the CI run) for testing.
+
+**Develop / build locally** (needs [Rust](https://rustup.rs) and, on Windows, the
+[Tauri prerequisites](https://tauri.app/start/prerequisites/)):
+
+```bash
+npm run tauri:dev            # desktop window on the Vite dev server
+npm run tauri:build          # Windows installers → src-tauri/target/release/bundle/
+npm run tauri:build:offshore # offshore variant (WebView2 offline installer)
+npm run version:check        # package.json = tauri.conf.json = Cargo.toml
+```
+
+Installers are built on Windows only (CI `windows-latest`); cross-compiling from Linux is not used.
+File access is limited to the files picked in a dialog (Tauri capabilities in
+`src-tauri/capabilities/default.json`, no static file system scope). The desktop build has no
+service worker: everything ships with the installer.
+
 ### Project files (.isop)
 
 | Action | Shortcut |
@@ -82,10 +127,15 @@ npm run test:e2e  # Playwright (builds, then serves dist/ on :4173)
 - **Project files** — save / open / save as, unsaved marker, download fallback and mocked
   File System Access pickers.
 
+- **Desktop** (unit) — `platform/tauri.js` with the Tauri modules mocked (dialogs, in-place save,
+  Save as, close confirmation, file association), packaging settings, capabilities, single version.
+  The Windows installers themselves are built by CI (`desktop-windows` job).
+
 Parity requires pixel-identical canvases (stricter than the 0.5 % allowed by CLAUDE.md §9).
 
 Fixtures are rebuilt with the legacy code itself: `node scripts/make-fixtures.mjs`.
-Icons are rendered from `public/icons/icon.svg`: `node scripts/make-icons.mjs`.
+Icons are rendered from `public/icons/icon.svg`: `node scripts/make-icons.mjs` (web) and
+`node scripts/make-app-icon.mjs && npx tauri icon src-tauri/app-icon.png` (desktop).
 
 E2E tests run WebGL headless through SwiftShader. In CI, screenshots and the HTML report
 are uploaded as the `playwright-results` artifact.
@@ -113,15 +163,17 @@ src/
   core/             pure logic: geometry, model + normalize(), history, MTO/CSV, storage, .isop files, labels
   ui/               2D sketch, entry HUD, side panel, sheet/PNG export, document, PWA updates, keyboard, theme
   view3d/           three.js scene and component geometry
-  platform/         web / desktop differences (file save/open, close confirmation) — web for now
+  platform/         web / desktop differences: web.js (browser), tauri.js (desktop)
 tests/unit          Vitest
 tests/e2e           Playwright (smoke, parity, interaction parity)
 tests/fixtures      reference models (*.isop, raw v3 JSON)
 public/icons        PWA icons (generated from icon.svg)
+src-tauri/          desktop shell: Rust entry point, tauri.conf.json (+ offshore overlay), capabilities, icons
+scripts/            fixtures, icons, version sync
 ```
 
 `core/` never imports `ui/`: UI refresh after a model change is injected by `main.js`
 (`setHistoryHooks`). Append `?debug=1` to the URL to expose `window.__iso`
 (`S`, `V`, `mto`, `csv`, `derive`, `normalize`) for debugging and tests.
 
-See [`CLAUDE.md`](CLAUDE.md) for the roadmap (PWA, Windows desktop app with Tauri v2).
+See [`CLAUDE.md`](CLAUDE.md) for the roadmap.

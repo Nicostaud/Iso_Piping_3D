@@ -46,5 +46,7 @@ export function exportPNG(){
 }
 export const fname=()=>((S.M.meta.ligne||S.M.meta.projet||'iso-piping').trim().replace(/"/g,'in').replace(/[^\w.-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,60))||'iso-piping';
 export async function saveFile(name,data){
-  if(!await platform.saveFile({name,data}))toast('Download unavailable in this view');
+  const r=await platform.saveFile({name,data});
+  if(r===false)toast('Download unavailable in this view');
+  else if(r&&platform.isDesktop)toast('Saved: '+name);
 }
