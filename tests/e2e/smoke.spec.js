@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test';
 import { readFile } from 'node:fs/promises';
-import { guardNetwork, collectErrors, storedModel } from './helpers.js';
+import { guardNetwork, collectErrors, storedModel, noPickers } from './helpers.js';
 
 test('smoke: draw a pipe, generate 3D, export CSV — without network', async ({ page }, testInfo) => {
   const external = await guardNetwork(page);
   const errors = collectErrors(page);
+  await noPickers(page);
 
   await page.goto('/');
   await expect(page.locator('#cv')).toBeVisible();

@@ -121,3 +121,7 @@ details dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:10px 
  .brand span{display:none}
 }
 @media(max-width:600px){.tl{top:56px;right:10px}.cart{width:230px}.hres .big{font-size:22px}.p2d.drawing .hint{display:none}.hud{padding:8px 10px;gap:6px}.hud .hplane{display:none}.hres{min-height:0;padding-top:6px}.hf input{padding:4px 0}}
+/* Phase 2 additions: project file name and PWA update prompt */
+.brand .doc{font:600 14px Barlow,system-ui,sans-serif;font-style:normal;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:32ch}
+#upd{position:fixed;right:16px;bottom:16px;z-index:6;display:flex;align-items:center;gap:8px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);padding:8px 8px 8px 14px;font-size:14px;max-width:calc(100vw - 32px)}
+#upd button{min-height:34px}

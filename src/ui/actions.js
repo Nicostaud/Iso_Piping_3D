@@ -1,15 +1,14 @@
 /** Header buttons (new, open, save, PNG, undo/redo) and global keyboard shortcuts. */
-import { changed, pushUndo, redo, undo } from '../core/history.js';
-import { blank, normalize } from '../core/model.js';
+import { redo, undo } from '../core/history.js';
 import { CONSK } from '../data/frames.js';
 import { F, S, drawHist } from '../state.js';
 import { $ } from './dom.js';
-import { anyF, applyRef, clearF, consName, fields, hudBuild, hudShow, hudSync, hudUpdate, setCons, setEntry } from './hud.js';
-import { delSel, fillCart, hint, refreshSel, setTool, toast } from './panels.js';
-import { exportPNG, fname, saveFile } from './sheet.js';
+import { anyF, clearF, consName, fields, hudBuild, hudShow, hudSync, hudUpdate, setCons, setEntry } from './hud.js';
+import { delSel, hint, refreshSel, setTool, toast } from './panels.js';
+import { exportPNG } from './sheet.js';
 import { commitPreview, draw2D, endDraw, fit2D } from './sketch.js';
-import { generate, mark3D, setView } from '../view3d/scene.js';
-import { platform } from '../platform/index.js';
+import { generate, setView } from '../view3d/scene.js';
+import { newProject, openProject, saveProject } from './document.js';
 
 /** Header buttons (files, undo/redo) and global keyboard shortcuts. */
 export function initActions(){
@@ -43,13 +42,10 @@ addEventListener('keydown',e=>{
   if(kl==='f')fit2D();
   if(kl==='g'){if(S.view==='3d')setView('2d');else generate();}
 });
-$('#bSave').onclick=()=>saveFile(fname()+'.json',JSON.stringify(S.M,null,1));
-$('#bOpen').onclick=async()=>{
-  const f=await platform.openProject();if(!f)return;
-  try{const m=normalize(JSON.parse(f.text));pushUndo();S.M=m;S.sel=null;S.drawFrom=null;applyRef();changed();fillCart();fit2D();if(S.G3)S.G3.fitted=false;mark3D();toast('File opened: '+f.name);}catch(err){toast('File not recognised (Iso Piping JSON expected)');}
-};
+$('#bSave').onclick=()=>saveProject(false);
+$('#bOpen').onclick=()=>openProject();
 $('#bPng').onclick=exportPNG;
-$('#bNew').onclick=()=>{pushUndo();S.M=blank({...S.M.meta,projet:'',ligne:'',fluide:'',rev:'A'});S.sel=null;S.drawFrom=null;changed();fillCart();fit2D();if(S.G3)S.G3.fitted=false;setTool('pipe');toast('Blank sheet · Ctrl+Z to go back');};
+$('#bNew').onclick=()=>newProject();
 $('#bUndo').onclick=undo;
 $('#bRedo').onclick=redo;
 }

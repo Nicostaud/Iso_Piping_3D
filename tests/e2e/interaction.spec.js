@@ -13,7 +13,7 @@ const VIEWPORT = { width: 1440, height: 900 };
 const HOOK = { legacy: 'window.__t', app: 'window.__iso.S' };
 
 async function open(browser, side) {
-  const ctx = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, colorScheme: 'light' });
+  const ctx = await browser.newContext({ viewport: VIEWPORT, deviceScaleFactor: 1, serviceWorkers: 'block', colorScheme: 'light' });
   const page = await ctx.newPage();
   const errors = collectErrors(page);
   const external = side === 'legacy' ? await routeLegacy(page) : await guardNetwork(page);
@@ -165,7 +165,7 @@ test('interaction parity: tools, HUD entry, side panel, undo/redo, eraser, 3D', 
     const png = async (s) => PNG.sync.read(Buffer.from((await s.page.evaluate(() => document.querySelector('#cv').toDataURL())).split(',')[1], 'base64'));
     const [pl, pa] = [await png(L), await png(A)];
     const diff = pixelmatch(pl.data, pa.data, null, pl.width, pl.height, { threshold: 0 });
-    expect(diff / (pl.width * pl.height)).toBeLessThanOrEqual(0.005);
+    expect(diff, '2D pixels differing after the interaction script').toBe(0);
     // Known legacy bug, reproduced on purpose (parity first, fixed later): deleting the
     // hovered segment with the Delete key leaves a stale hover reference, so paint()
     // throws until the mouse moves again. Any other console error fails the test.

@@ -3,12 +3,15 @@
  *
  * Contract (CLAUDE.md §7):
  *   platform.isDesktop                        boolean
- *   platform.saveFile({ name, mime, data })   data: string | Blob | Uint8Array → Promise<boolean>
+ *   platform.saveFile({ name, mime, data })   data: string | Blob | Uint8Array
+ *                                             → Promise<boolean|null>  (null: cancelled by the user)
  *   platform.openProject()                    → Promise<{ name, path?, text } | null>
- *   platform.saveProject({ text, path?, saveAs? }) → Promise<{ path?, name } | null>   (phase 2)
- *   platform.onBeforeClose(handler)           (phase 2/3)
+ *   platform.saveProject({ text, name, path?, saveAs? })
+ *                                             → Promise<{ path?, name } | null>  (throws on write error)
+ *   platform.onBeforeClose(handler)           handler() → true to ask for confirmation
  *
- * Phase 1 ships the web implementation only; the Tauri implementation comes in phase 3.
+ * `path` is opaque: a file handle id on the web, a file system path on desktop.
+ * The web implementation ships now; the Tauri implementation comes in phase 3.
  */
 import { webPlatform } from './web.js';
 
