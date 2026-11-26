@@ -1,0 +1,246 @@
+{
+ "app": "iso-piping-3d",
+ "format": 1,
+ "savedAt": "2026-01-01T00:00:00.000Z",
+ "model": {
+  "v": 4,
+  "nid": 28,
+  "nodes": [
+   {
+    "id": 1,
+    "x": 0,
+    "y": 0,
+    "z": 0
+   },
+   {
+    "id": 2,
+    "x": 4,
+    "y": 0,
+    "z": 0
+   },
+   {
+    "id": 6,
+    "x": 4,
+    "y": 2,
+    "z": 0
+   },
+   {
+    "id": 9,
+    "x": 4,
+    "y": 2,
+    "z": 2
+   },
+   {
+    "id": 12,
+    "x": 5.7678,
+    "y": 3.7678,
+    "z": 2
+   },
+   {
+    "id": 15,
+    "x": 7.7678,
+    "y": 3.7678,
+    "z": 2
+   },
+   {
+    "id": 19,
+    "x": 9.7678,
+    "y": 3.7678,
+    "z": 2,
+    "end": "cap"
+   },
+   {
+    "id": 22,
+    "x": 2,
+    "y": 0,
+    "z": 0
+   },
+   {
+    "id": 24,
+    "x": 2,
+    "y": -3,
+    "z": 0,
+    "end": "blind"
+   }
+  ],
+  "segs": [
+   {
+    "id": 3,
+    "a": 1,
+    "b": 22,
+    "nps": 10,
+    "sch": "40",
+    "cls": "150",
+    "mat": "A106B",
+    "L": 1500
+   },
+   {
+    "id": 7,
+    "a": 2,
+    "b": 6,
+    "nps": 10,
+    "sch": "40",
+    "cls": "150",
+    "mat": "A106B",
+    "L": null
+   },
+   {
+    "id": 10,
+    "a": 6,
+    "b": 9,
+    "nps": 10,
+    "sch": "40",
+    "cls": "150",
+    "mat": "A106B",
+    "L": null
+   },
+   {
+    "id": 13,
+    "a": 9,
+    "b": 12,
+    "nps": 10,
+    "sch": "40",
+    "cls": "150",
+    "mat": "A106B",
+    "L": 2500
+   },
+   {
+    "id": 16,
+    "a": 12,
+    "b": 15,
+    "nps": 10,
+    "sch": "40",
+    "cls": "150",
+    "mat": "A106B",
+    "L": null
+   },
+   {
+    "id": 20,
+    "a": 15,
+    "b": 19,
+    "nps": 8,
+    "sch": "80",
+    "cls": "150",
+    "mat": "A106B",
+    "L": null
+   },
+   {
+    "id": 23,
+    "a": 22,
+    "b": 2,
+    "nps": 10,
+    "sch": "40",
+    "cls": "150",
+    "mat": "A106B",
+    "L": 1500
+   },
+   {
+    "id": 25,
+    "a": 22,
+    "b": 24,
+    "nps": 8,
+    "sch": "40",
+    "cls": "150",
+    "mat": "A106B",
+    "L": null
+   }
+  ],
+  "comps": [
+   {
+    "id": 4,
+    "seg": 3,
+    "t": 0.5,
+    "type": "gate",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 5,
+    "seg": 23,
+    "t": 0.6000000000000001,
+    "type": "flange",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 8,
+    "seg": 7,
+    "t": 0.5,
+    "type": "globe",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 11,
+    "seg": 10,
+    "t": 0.5,
+    "type": "tg",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 14,
+    "seg": 13,
+    "t": 0.5,
+    "type": "pg",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 17,
+    "seg": 16,
+    "t": 0.4,
+    "type": "psv",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 18,
+    "seg": 16,
+    "t": 0.75,
+    "type": "ystr",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 21,
+    "seg": 20,
+    "t": 0.5,
+    "type": "shoe",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 26,
+    "seg": 25,
+    "t": 0.4,
+    "type": "ball",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 27,
+    "seg": 25,
+    "t": 0.7,
+    "type": "guide",
+    "rev": false,
+    "fig": "auto"
+   }
+  ],
+  "meta": {
+   "projet": "Utility water - test fixture",
+   "ligne": "6\"-UW-1001-A1",
+   "fluide": "Utility water",
+   "rev": "C",
+   "scale": 1000,
+   "dn": 10,
+   "sch": "40",
+   "cls": "150",
+   "mat": "A106B",
+   "ref": "geo",
+   "unit": "in",
+   "dims": true,
+   "els": false
+  }
+ }
+}

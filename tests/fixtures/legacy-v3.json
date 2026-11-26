@@ -1,0 +1,20 @@
+{
+ "v": 3,
+ "nid": 10,
+ "meta": {"projet": "Produced water - v3 storage", "ligne": "8in-PW-3001", "fluide": "Produced water", "rev": "B", "scale": 500, "dn": 8, "sch": "40", "cls": "300", "mat": "A333", "ref": "geo"},
+ "nodes": [
+  {"id": 1, "x": 0, "y": 0, "z": 0},
+  {"id": 2, "x": 4, "y": 0, "z": 0},
+  {"id": 3, "x": 4, "y": 3, "z": 0},
+  {"id": 4, "x": 4, "y": 3, "z": -2, "end": "cap"}
+ ],
+ "segs": [
+  {"id": 5, "a": 1, "b": 2, "nps": 8, "sch": "40", "cls": "300", "mat": "A333", "L": 2000},
+  {"id": 6, "a": 2, "b": 3, "nps": 8},
+  {"id": 7, "a": 3, "b": 4, "nps": 6, "sch": "80"}
+ ],
+ "comps": [
+  {"id": 8, "seg": 5, "t": 0.5, "type": "gate"},
+  {"id": 9, "seg": 6, "t": 0.4, "type": "flange"}
+ ]
+}

@@ -34,13 +34,23 @@ Quick reference (also in the app, *Shortcuts and conventions*):
 ## Tests
 
 ```bash
-npm test          # Vitest unit tests
+npm test          # Vitest unit tests (data tables, geometry, normalize, MTO)
 npm run test:e2e  # Playwright (builds, then serves dist/ on :4173)
 ```
 
-E2E tests block every non-local request to prove offline operation. WebGL runs headless
-through SwiftShader. In CI, screenshots and the HTML report are uploaded as the
-`playwright-results` artifact.
+- **Smoke** — draw, generate 3D, export CSV with every external request blocked.
+- **Parity** — `legacy/index.html` and the app are loaded with the same models
+  (built-in sample + `tests/fixtures/`), at 1440×900 and 390×844, light and dark:
+  identical CSV (byte for byte), 2D canvas within 0.5 % of pixels, same 3D mesh count,
+  no console error. The legacy test copy is generated on the fly (CDN and Google Fonts
+  routed to the same local files the app bundles); the file on disk is never modified.
+- **Interaction parity** — one mouse/keyboard script played on both, model compared
+  after every step.
+
+Fixtures are rebuilt with the legacy code itself: `node scripts/make-fixtures.mjs`.
+
+E2E tests run WebGL headless through SwiftShader. In CI, screenshots and the HTML report
+are uploaded as the `playwright-results` artifact.
 
 ## Known limits
 
@@ -56,10 +66,23 @@ Validate all engineering data before procurement.
 
 ```
 legacy/index.html   V4.1 reference — do not modify
-index.html          Vite shell (markup + CSS of V4.1)
-src/                application sources
+index.html          Vite shell (V4.1 markup)
+src/
+  main.js           bootstrap and UI wiring only
+  state.js          single mutable state object S (+ undo stacks, entry fields, 2D view)
+  styles.css        V4.1 stylesheet
+  data/             engineering tables: pipe (B36.10M), bolting (B16.5), materials, catalogue, frames
+  core/             pure logic: geometry, model + normalize(), history, MTO/CSV, storage, labels
+  ui/               2D sketch, entry HUD, side panel, sheet/PNG export, keyboard, theme
+  view3d/           three.js scene and component geometry
+  platform/         web / desktop differences (file save/open) — web only for now
 tests/unit          Vitest
-tests/e2e           Playwright
+tests/e2e           Playwright (smoke, parity, interaction parity)
+tests/fixtures      reference models (*.isop, raw v3 JSON)
 ```
+
+`core/` never imports `ui/`: UI refresh after a model change is injected by `main.js`
+(`setHistoryHooks`). Append `?debug=1` to the URL to expose `window.__iso`
+(`S`, `V`, `mto`, `csv`, `derive`, `normalize`) for debugging and tests.
 
 See [`CLAUDE.md`](CLAUDE.md) for the roadmap (PWA, Windows desktop app with Tauri v2).
