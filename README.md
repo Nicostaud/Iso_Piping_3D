@@ -130,6 +130,8 @@ npm run test:e2e  # Playwright (builds, then serves dist/ on :4173)
 - **Desktop** (unit) — `platform/tauri.js` with the Tauri modules mocked (dialogs, in-place save,
   Save as, close confirmation, file association), packaging settings, capabilities, single version.
   The Windows installers themselves are built by CI (`desktop-windows` job).
+- **Desktop runtime smoke** — `scripts/desktop-smoke.mjs` drives the real app through
+  `tauri-driver` (usage in the file header): file association, in-place save, refused paths.
 
 Parity requires pixel-identical canvases (stricter than the 0.5 % allowed by CLAUDE.md §9).
 
