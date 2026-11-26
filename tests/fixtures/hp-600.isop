@@ -1,0 +1,261 @@
+{
+ "app": "iso-piping-3d",
+ "format": 1,
+ "savedAt": "2026-01-01T00:00:00.000Z",
+ "model": {
+  "v": 4,
+  "nid": 30,
+  "nodes": [
+   {
+    "id": 1,
+    "x": 0,
+    "y": 0,
+    "z": 0
+   },
+   {
+    "id": 2,
+    "x": 0,
+    "y": 3,
+    "z": 0
+   },
+   {
+    "id": 7,
+    "x": 0,
+    "y": 3,
+    "z": 2
+   },
+   {
+    "id": 10,
+    "x": -2,
+    "y": 3,
+    "z": 2
+   },
+   {
+    "id": 14,
+    "x": -0.5,
+    "y": 3,
+    "z": 4
+   },
+   {
+    "id": 17,
+    "x": -2,
+    "y": 3,
+    "z": 4,
+    "end": "plug"
+   },
+   {
+    "id": 21,
+    "x": 3,
+    "y": -2,
+    "z": 0
+   },
+   {
+    "id": 22,
+    "x": 6,
+    "y": -2,
+    "z": 0,
+    "end": "blind"
+   },
+   {
+    "id": 26,
+    "x": 3,
+    "y": -2,
+    "z": 2,
+    "end": "hucap"
+   }
+  ],
+  "segs": [
+   {
+    "id": 3,
+    "a": 1,
+    "b": 2,
+    "nps": 10,
+    "sch": "80",
+    "cls": "600",
+    "mat": "SS316",
+    "L": 3000
+   },
+   {
+    "id": 8,
+    "a": 2,
+    "b": 7,
+    "nps": 10,
+    "sch": "80",
+    "cls": "600",
+    "mat": "SS316",
+    "L": null
+   },
+   {
+    "id": 11,
+    "a": 7,
+    "b": 10,
+    "nps": 10,
+    "sch": "80",
+    "cls": "600",
+    "mat": "SS316",
+    "L": null
+   },
+   {
+    "id": 15,
+    "a": 10,
+    "b": 14,
+    "nps": 10,
+    "sch": "80",
+    "cls": "600",
+    "mat": "SS316",
+    "L": 2500
+   },
+   {
+    "id": 18,
+    "a": 14,
+    "b": 17,
+    "nps": 10,
+    "sch": "80",
+    "cls": "600",
+    "mat": "SS316",
+    "L": null
+   },
+   {
+    "id": 23,
+    "a": 21,
+    "b": 22,
+    "nps": 7,
+    "sch": "160",
+    "cls": "900",
+    "mat": "X52",
+    "L": null
+   },
+   {
+    "id": 27,
+    "a": 21,
+    "b": 26,
+    "nps": 5,
+    "sch": "XXS",
+    "cls": "A10",
+    "mat": "A333",
+    "L": null
+   }
+  ],
+  "comps": [
+   {
+    "id": 4,
+    "seg": 3,
+    "t": 0.25,
+    "type": "check",
+    "rev": true,
+    "fig": "auto"
+   },
+   {
+    "id": 5,
+    "seg": 3,
+    "t": 0.55,
+    "type": "dcheck",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 6,
+    "seg": 3,
+    "t": 0.85,
+    "type": "spec",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 9,
+    "seg": 8,
+    "t": 0.5,
+    "type": "anchor",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 12,
+    "seg": 11,
+    "t": 0.3,
+    "type": "bfly",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 13,
+    "seg": 11,
+    "t": 0.7,
+    "type": "vic",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 16,
+    "seg": 15,
+    "t": 0.5,
+    "type": "hanger",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 19,
+    "seg": 18,
+    "t": 0.5,
+    "type": "tu",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 20,
+    "seg": 18,
+    "t": 0.8,
+    "type": "needle",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 24,
+    "seg": 23,
+    "t": 0.3,
+    "type": "choke",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 25,
+    "seg": 23,
+    "t": 0.7,
+    "type": "flange",
+    "rev": false,
+    "fig": "auto"
+   },
+   {
+    "id": 28,
+    "seg": 27,
+    "t": 0.3,
+    "type": "hu",
+    "rev": false,
+    "fig": "1502"
+   },
+   {
+    "id": 29,
+    "seg": 27,
+    "t": 0.65,
+    "type": "plug",
+    "rev": false,
+    "fig": "auto"
+   }
+  ],
+  "meta": {
+   "projet": "HP gas - test fixture",
+   "ligne": "6\"-HG-2002-F6",
+   "fluide": "Gas",
+   "rev": "B",
+   "scale": 1000,
+   "dn": 10,
+   "sch": "80",
+   "cls": "600",
+   "mat": "SS316",
+   "ref": "ship",
+   "unit": "dn",
+   "dims": true,
+   "els": true
+  }
+ }
+}

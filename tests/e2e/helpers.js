@@ -32,3 +32,15 @@ export function collectErrors(page) {
 export function storedModel(page) {
   return page.evaluate(() => JSON.parse(localStorage.getItem('isopiping.v4') || 'null'));
 }
+
+/**
+ * Removes the File System Access pickers so that saving falls back to
+ * downloads and opening to <input type="file"> (Playwright cannot drive native pickers).
+ * @param {import('@playwright/test').Page} page
+ */
+export async function noPickers(page) {
+  await page.addInitScript(() => {
+    delete window.showSaveFilePicker;
+    delete window.showOpenFilePicker;
+  });
+}
